@@ -126,7 +126,8 @@
     "validate": "npm run lint && npm run test:coverage && flow && npm run build && npm run bundlesize",
     "format": "prettier \"**/*.{js,jsx,ts}\" --write",
     "bundlesize": "bundlesize",
-    "prepublishOnly": "npm run validate"
+    "prepublishOnly": "npm run validate",
+    "postinstall": "npm run build"
   },
   "bundlesize": [
     {
