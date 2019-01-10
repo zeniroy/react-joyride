@@ -127,7 +127,7 @@
     "format": "prettier \"**/*.{js,jsx,ts}\" --write",
     "bundlesize": "bundlesize",
     "prepublishOnly": "npm run validate",
-    "postinstall": "npm run build"
+    "postinstall": "npm i && npm run build"
   },
   "bundlesize": [
     {
