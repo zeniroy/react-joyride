@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import treeChanges from 'tree-changes';
@@ -16,11 +17,12 @@ import { getBrowser, isLegacy, log } from '../modules/helpers';
 import LIFECYCLE from '../constants/lifecycle';
 
 import Spotlight from './Spotlight';
+import getReferenceOffsets from '../modules/getReferenceOffsets';
 
 export default class JoyrideOverlay extends React.Component {
   constructor(props) {
     super(props);
-
+    this.spotlight = React.createRef();
     this.state = {
       mouseOverSpotlight: false,
       isScrolling: false,
@@ -61,6 +63,7 @@ export default class JoyrideOverlay extends React.Component {
     }
 
     window.addEventListener('resize', this.handleResize);
+    this.fixTop();
   }
 
   componentDidUpdate(prevProps) {
@@ -90,6 +93,8 @@ export default class JoyrideOverlay extends React.Component {
         window.removeEventListener('mousemove', this.handleMouseMove);
       }
     }
+
+    this.fixTop();
   }
 
   componentWillUnmount() {
@@ -205,9 +210,30 @@ export default class JoyrideOverlay extends React.Component {
     }
 
     return (
-      <div className="react-joyride__overlay" style={stylesOverlay} onClick={onClickOverlay}>
+      <div
+        className="react-joyride__overlay"
+        style={stylesOverlay}
+        onClick={onClickOverlay}
+        ref={this.spotlight}
+      >
         {spotlight}
       </div>
     );
   }
+
+  fixTop = () => {
+    if (this.spotlight.current) {
+      let spotlightElements = this.spotlight.current.getElementsByClassName(
+        'react-joyride__spotlight',
+      );
+      if (spotlightElements.length > 0) {
+        let spotlightElement = spotlightElements[0];
+        const element = getElement(this.props.target);
+        if (!isFixed(element)) {
+          let offset = getReferenceOffsets(this.spotlight.current, element);
+          spotlightElement.style.top = `${offset.top - 10}px`;
+        }
+      }
+    }
+  };
 }
