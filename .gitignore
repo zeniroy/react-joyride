@@ -3,3 +3,4 @@ _book/
 coverage
 es
 node_modules
+.idea
